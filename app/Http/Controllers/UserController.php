@@ -60,5 +60,36 @@ class UserController extends Controller
         $user = User::find($id);
         return response()->json($user);
     }
+
+    public function update(Request $request,$id)
+    {
+        dd($request->name);
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'email' => 'required|email|unique:users',
+            'roles' => 'required|in:admin,user',
+        ]);
+
+        if ($request->file('avatar')) {
+            $extension = $request->file('avatar')->getClientOriginalExtension();
+            $newName = $request->name . '-' . now()->timestamp . '.' . $extension;
+
+            // menyimpan gambar ke dir image
+            $path = $request->file('avatar')->storeAs('image', $newName);
+            $user = User::whereId($id)->update([
+                'avatar' => $path,
+            ]);
+        }
+
+        // Buat user baru dan simpan ke database
+        $user = User::whereId($id)->update([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+        ]);
+        $user->syncRoles($request->input('roles'));
+
+        return response()->json(['message' => 'User registered and assigned role successfully']);
+    }
 }
 

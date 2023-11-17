@@ -86,11 +86,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="editFormUser" method="POST" enctype="multipart/form-data">
+                    <form id="editFormUser">
                         @csrf
                         <div class="form-group">
                             <label for="name">Name</label>
                             <input type="text" required id="name_edit" name="name" class="form-control">
+                            <input type="hidden" name="id" id="userIdEdit">
                         </div>
                         <div class="form-group">
                             <label for="avatar">Avatar</label>
@@ -112,7 +113,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batalkan</button>
-                    <button type="submit" id="createUserButton" class="btn btn-primary">Tambah Data</button>
+                    <button type="button" id="editUserButton" class="btn btn-primary">Ubah Data</button>
                 </div>
             </div>
         </div>
